@@ -1,23 +1,27 @@
 // set focus in name field
 document.getElementById('name').focus();
+
+// global vars
 const userTitle = document.getElementById('title');
 const other = document.getElementById('other-title');
 const otherText = document.createElement('input');
 const design = document.getElementById('design');
 const colors = document.getElementById('color').children;
 const colorDiv = document.getElementById('color').parentElement;
+const activities = document.querySelector('.activities').children;
 
+
+// hides other text input box
 other.style.display = 'none';
 
-userTitle.addEventListener('change', (e)=>{
+// shows text input for "other" field when selected
+userTitle.addEventListener('change', (e) => {
     if(e.target.value === 'other'){
         other.style.display = '';
     } else {
         other.style.display = 'none';
     } 
 });
-
-
 // set all color displays to none
 for (let i = 0; i < colors.length; i++ ){
     let options = color[i];
@@ -26,6 +30,7 @@ for (let i = 0; i < colors.length; i++ ){
 //  hide color choice
 colorDiv.style.display = 'none';
 
+// adjusts shirt color options based on style selection
 design.addEventListener('change', (e) => {
     if(e.target.value === 'js puns'){
         const colors = document.getElementById('color').children;
@@ -50,5 +55,4 @@ design.addEventListener('change', (e) => {
         }
         colorDiv.style.display = '';
     }
-
 });
