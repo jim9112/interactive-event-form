@@ -148,8 +148,6 @@ activities.addEventListener('change', (e) => {
     }
 });
 
-
-
 // hide all payment options until one is selected
 paypal.style.display = 'none';
 bitcoin.style.display = 'none';
@@ -173,98 +171,136 @@ paymentOptions.addEventListener('change', (e) => {
     }
 });
 
-// const nameErrorMessage = () => {
-//     const name = document.getElementById('name');
-//     const errorMessage = document.createElement('div');
-//     errorMessage.innerText = 'Please provide a name';
-//     errorMessage.id = 'nameError';
-//     errorMessage.style.color = 'red';
-// };
+const name = document.getElementById('name');
+const mail = document.getElementById('mail');
+const creditNum = document.getElementById('cc-num');
+const zip = document.getElementById('zip');
+const cvv = document.getElementById('cvv');
+var nameValid = false;
+var emailValid = false;
+var eventsValid = false;
+var ccNumValid = false;
+var zipValid = false;
+var cvvValid = false;
 
-
-var formFinished = true;
-
-const checkNameField = (e) => {
-    const name = document.getElementById('name');
+// check name field
+const checkNameField = () => {
     if (name.value.length === 0) {
-        formFinished = false;
         name.style.border = 'red solid 2px';
-        e.preventDefault();
+        nameValid = false;
     } else
     if (name.value.length > 0) {
         name.style.border = '';
+        nameValid = true;
     }
 };
 
 
 // regex for form validation
-var emailRegEx = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+var emailRegEx = /^[^@]+@[^@.]+\.[a-z]+$/;
 var cardNumRegEx = /^\d{13,15}$/;
 var zipRegEx = /^\d{5}$/;
 var cvvRegEx = /^\d{3}$/;
 
-const checkEmailField = (e) => {
-    const mail = document.getElementById('mail');
-    var test = mail.value.length > 0 || emailRegEx.test(mail.value);
+// check email field
+const checkEmailField = () => {
+    var test = mail.value.length > 0 && emailRegEx.test(mail.value);
     if (!test) {
         mail.style.border = 'red solid 2px';
-        e.preventDefault();
-    }
-};
-const checkEvents = (e) => {
-    if (totalPrice === 0) {
-        e.preventDefault();
+        emailValid = false;
+    } else {
+        mail.style.border = '';
+        emailValid = true;
     }
 };
 
-const checkCCNum = (e) => {
-    const creditNum = document.getElementById('cc-num');
+// check events
+const checkEvents = () => {
+    if (totalPrice === 0) {
+        eventsValid = false;
+    } else {
+        eventsValid = true;
+    }
+};
+
+// check credit card number
+const checkCCNum = () => {
     if (creditCard.selected === true) {
         console.log(cardNumRegEx);
         var test = creditNum.value.length > 0 && cardNumRegEx.test(creditNum.value);
         if (!test) {
             creditNum.style.border = 'red solid 2px';
-            e.preventDefault();
+            ccNumValid = false;
         } else {
             creditNum.style.border = '';
+            ccNumValid = true;
         }
+    } else {
+        ccNumValid = true;
     }
 };
 
-const checkZip = (e) => {
-    const zip = document.getElementById('zip');
+// check zipcode
+const checkZip = () => {
     if (creditCard.selected === true) {
         console.log(cardNumRegEx);
         var test = zip.value.length > 0 && zipRegEx.test(zip.value);
         if (!test) {
             zip.style.border = 'red solid 2px';
-            e.preventDefault();
+            zipValid = false;
         } else {
             zip.style.border = '';
+            zipValid = true;
         }
+    } else {
+        zipValid = true;
     }
 };
 
-const checkCvv = (e) => {
-    const cvv = document.getElementById('cvv');
+// check cvv
+const checkCvv = () => {
     if (creditCard.selected === true) {
         var test = cvv.value.length > 0 && cvvRegEx.test(cvv.value);
         if (!test) {
             cvv.style.border = 'red solid 2px';
-            e.preventDefault();
+            cvvValid = false;
         } else {
             cvv.style.border = '';
+            cvvValid = true;
         }
+    } else {
+        cvvValid = true;
     }
 };
 
 
 // check fields before form submit
 document.querySelector('form').addEventListener('submit', (e) => {
-    checkNameField(e);
-    checkEmailField(e);
-    checkEvents(e);
-    checkCCNum(e);
-    checkZip(e);
-    checkCvv(e);
+    checkNameField();
+    checkEmailField();
+    checkEvents();
+    checkCCNum();
+    checkZip();
+    checkCvv();
+    if (nameValid === false || emailValid === false || eventsValid === false || ccNumValid === false || zipValid === false || cvvValid ===false) {
+        e.preventDefault();
+
+    }
+});
+
+name.addEventListener('keyup', () => {
+    checkNameField();
+});
+
+mail.addEventListener('keyup', () => {
+    checkEmailField();
+});
+creditNum.addEventListener('keyup', () => {
+    checkCCNum();
+});
+zip.addEventListener('keyup', () => {
+    checkZip();
+});
+cvv.addEventListener('keyup', () => {
+    checkCvv();
 });
