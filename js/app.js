@@ -82,6 +82,14 @@ const printTotal = () => {
     newTotal.textContent = 'Total: $' + totalPrice;
 };
 
+// error message for activities field
+const eventErrorMessage = document.createElement('span');
+eventErrorMessage.innerText = 'Please select at least one event';
+eventErrorMessage.style.color = 'red';
+eventErrorMessage.style.display = 'none';
+eventErrorMessage.id = 'eventError';
+document.querySelector('.activities legend').appendChild(eventErrorMessage);
+
 // event listener for the event selection menu
 activities.addEventListener('change', (e) => {
     // const checked = e.target.checked = true;
@@ -153,7 +161,18 @@ activities.addEventListener('change', (e) => {
             enableWhenUnchecked();
         }
     }
+    if(totalPrice === 0){
+        eventErrorMessage.style.display = '';
+    } else {
+        eventErrorMessage.style.display = 'none';
+    }
 });
+
+
+
+
+
+
 
 // hide all payment options until one is selected
 paypal.style.display = 'none';
@@ -247,8 +266,10 @@ const checkEmailField = () => {
 const checkEvents = () => {
     if (totalPrice === 0) {
         eventsValid = false;
+        eventErrorMessage.style.display = '';
     } else {
         eventsValid = true;
+        eventErrorMessage.style.display = 'none';
     }
 };
 
