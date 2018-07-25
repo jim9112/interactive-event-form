@@ -17,8 +17,6 @@ const bitcoin = document.getElementById('bitcoin');
 const credit = document.getElementById('credit-card');
 const individualActivities = document.querySelectorAll('.activities label input');
 
-
-console.log(individualActivities);
 // hides other text input box
 other.style.display = 'none';
 
@@ -30,11 +28,13 @@ userTitle.addEventListener('change', (e) => {
         other.style.display = 'none';
     }
 });
+
 // set all color displays to none
 for (let i = 0; i < colors.length; i++) {
     let options = color[i];
     options.style.display = 'none';
 }
+
 //  hide color choice selector
 colorDiv.style.display = 'none';
 
@@ -46,6 +46,7 @@ design.addEventListener('change', (e) => {
             let options = color[i];
             if (options.textContent.endsWith('(JS Puns shirt only)')) {
                 options.style.display = '';
+                color[0].selected = true;
             } else {
                 options.style.display = 'none';
             }
@@ -57,19 +58,25 @@ design.addEventListener('change', (e) => {
             let options = color[i];
             if (options.textContent.endsWith('JS shirt only)')) {
                 options.style.display = '';
+                color[3].selected = true;
             } else {
                 options.style.display = 'none';
             }
         }
         colorDiv.style.display = '';
+    } else {
+        colorDiv.style.display = 'none';
     }
 });
 
+// add total field and value to events
 var totalPrice = 0;
 const totalText = document.createElement('p');
 totalText.id = 'eventTotal';
 activities.appendChild(totalText);
 
+
+// generate new total
 const printTotal = () => {
     const newTotal = document.getElementById('eventTotal');
     newTotal.textContent = 'Total: $' + totalPrice;
@@ -171,6 +178,7 @@ paymentOptions.addEventListener('change', (e) => {
     }
 });
 
+// variables for form validation
 const name = document.getElementById('name');
 const mail = document.getElementById('mail');
 const creditNum = document.getElementById('cc-num');
@@ -183,15 +191,33 @@ var ccNumValid = false;
 var zipValid = false;
 var cvvValid = false;
 
+// generates and displays error messages for inpu fields
+const displayErrorMessage = (element, name) =>{
+    const errorMessage = document.createElement('span');
+    errorMessage.innerText = 'Please enter a valid ' + element;
+    errorMessage.style.color = 'red';
+    errorMessage.style.display = '';
+    errorMessage.id = element + 'Error';
+    name.parentNode.insertBefore(errorMessage, name);
+};
+displayErrorMessage('name', name);
+displayErrorMessage('email', mail);
+displayErrorMessage('card number', creditNum);
+displayErrorMessage('zip code', zip);
+displayErrorMessage('cvv', cvv);
+
 // check name field
 const checkNameField = () => {
+    const nameError = document.getElementById('nameError');
     if (name.value.length === 0) {
         name.style.border = 'red solid 2px';
         nameValid = false;
+        nameError.style.display = '';
     } else
     if (name.value.length > 0) {
         name.style.border = '';
         nameValid = true;
+        nameError.style.display = 'none';
     }
 };
 
@@ -204,13 +230,16 @@ var cvvRegEx = /^\d{3}$/;
 
 // check email field
 const checkEmailField = () => {
+    const emailError = document.getElementById('emailError');
     var test = mail.value.length > 0 && emailRegEx.test(mail.value);
     if (!test) {
         mail.style.border = 'red solid 2px';
         emailValid = false;
+        emailError.style.display = '';
     } else {
         mail.style.border = '';
         emailValid = true;
+        emailError.style.display = 'none';
     }
 };
 
@@ -226,14 +255,16 @@ const checkEvents = () => {
 // check credit card number
 const checkCCNum = () => {
     if (creditCard.selected === true) {
-        console.log(cardNumRegEx);
+        const creditError = document.getElementById('card numberError');
         var test = creditNum.value.length > 0 && cardNumRegEx.test(creditNum.value);
         if (!test) {
             creditNum.style.border = 'red solid 2px';
             ccNumValid = false;
+            creditError.style.display = '';
         } else {
             creditNum.style.border = '';
             ccNumValid = true;
+            creditError.style.display = 'none';
         }
     } else {
         ccNumValid = true;
@@ -243,14 +274,16 @@ const checkCCNum = () => {
 // check zipcode
 const checkZip = () => {
     if (creditCard.selected === true) {
-        console.log(cardNumRegEx);
+        const zipError = document.getElementById('zip codeError');
         var test = zip.value.length > 0 && zipRegEx.test(zip.value);
         if (!test) {
             zip.style.border = 'red solid 2px';
             zipValid = false;
+            zipError.style.display = '';
         } else {
             zip.style.border = '';
             zipValid = true;
+            zipError.style.display = 'none';
         }
     } else {
         zipValid = true;
@@ -260,13 +293,16 @@ const checkZip = () => {
 // check cvv
 const checkCvv = () => {
     if (creditCard.selected === true) {
+        const cvvError = document.getElementById('cvvError');
         var test = cvv.value.length > 0 && cvvRegEx.test(cvv.value);
         if (!test) {
             cvv.style.border = 'red solid 2px';
             cvvValid = false;
+            cvvError.style.display = '';
         } else {
             cvv.style.border = '';
             cvvValid = true;
+            cvvError.style.display = 'none';
         }
     } else {
         cvvValid = true;
@@ -274,7 +310,7 @@ const checkCvv = () => {
 };
 
 
-// check fields before form submit
+// check fields for completion before form submit
 document.querySelector('form').addEventListener('submit', (e) => {
     checkNameField();
     checkEmailField();
@@ -288,6 +324,8 @@ document.querySelector('form').addEventListener('submit', (e) => {
     }
 });
 
+
+// real-time field monitoring
 name.addEventListener('keyup', () => {
     checkNameField();
 });
@@ -295,12 +333,15 @@ name.addEventListener('keyup', () => {
 mail.addEventListener('keyup', () => {
     checkEmailField();
 });
+
 creditNum.addEventListener('keyup', () => {
     checkCCNum();
 });
+
 zip.addEventListener('keyup', () => {
     checkZip();
 });
+
 cvv.addEventListener('keyup', () => {
     checkCvv();
 });
