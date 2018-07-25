@@ -139,7 +139,6 @@ activities.addEventListener('change', (e) => {
 
     // adjust the totals for event costs
     if (selection.checked === true) {
-        console.log(label.textContent);
         if (label.textContent.includes("200")) {
             totalPrice += 200;
             printTotal();
@@ -150,7 +149,6 @@ activities.addEventListener('change', (e) => {
             disableWhenChecked();
         }
     } else if (selection.checked != true) {
-        console.log(label.textContent);
         if (label.textContent.includes("200")) {
             totalPrice -= 200;
             printTotal();
