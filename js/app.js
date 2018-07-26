@@ -213,7 +213,7 @@ const displayErrorMessage = (element, name) =>{
     const errorMessage = document.createElement('span');
     errorMessage.innerText = 'Please enter a valid ' + element;
     errorMessage.style.color = 'red';
-    errorMessage.style.display = '';
+    errorMessage.style.display = 'none';
     errorMessage.id = element + 'Error';
     name.parentNode.insertBefore(errorMessage, name);
 };
