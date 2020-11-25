@@ -1,3 +1,3 @@
-Interavtive event form
+Interactive event form
 
 input validation and interactive fields
